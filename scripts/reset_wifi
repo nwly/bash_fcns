@@ -1,0 +1,4 @@
+sudo rmmod iwlagn
+sudo modprobe iwlagn
+modinfo iwlagn
+dmesg | grep iwl
