@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# Checks if input is an integer
+
+###### Parameter Settings
+
+verbose=true  # 
+user_input=
+
+###### Functions
+
+function usage {
+	cat <<- _EOfun_
+	usage: command [OPTIONS] [TEST_INPUT]
+	OPTIONS:
+		-h or --help
+		-i or --interactive
+		-q or --quiet  (suppress standard output)
+_EOfun_
+}
+
+function empty_input {
+	if [[ -z "$user_input" ]]; then
+		echo -n "Please input something to test if it's an integer: "
+		read user_input
+	fi
+}
+
+###### Main Code
+
+# Process positional parameters
+while [[ "$1" != "" ]]; do
+	case $1 in
+		-h | --help )	usage
+				exit ;;
+		-q | --quiet )	verbose=false ;;
+		* )		user_input=$1
+	esac
+	shift
+done
+
+# if user_input is empty
+empty_input
+
+
+check_it=$(echo "$user_input" | tr -dc '[:digit:]')
+# tr -dc '[:digit:]' removes all non-digits from $user_input
+
+if [[ "$check_it" != "$user_input" ]]; then
+	$verbose && echo "User input ($user_input) is not an integer!"
+	exit 1
+elif [[ "$(echo "$user_input" | grep -q '^0' || echo "$?")" -eq "0" ]]; then
+# Check for input starting with 0
+# grep -q '^0' || echo "$?" outputs the exit status of grep
+	$verbose && echo "First digit of ($user_input) is a 0! Close but no cookie."
+	exit 1
+else
+	$verbose && echo "User input ($user_input) has been verified to be an integer."
+fi
+exit 0
