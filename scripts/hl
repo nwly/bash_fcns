@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# shortcut for:
+# <command> --help | less
+
+# Can be easy as: $1 --help | less
+# but decided to add some frills:
+
+###### Functions
+
+function usage {
+	cat <<- _EOfun_
+	usage: hl <command>
+	This effectively executes:
+	<command> --help | less
+_EOfun_
+}
+
+
+####### Main Code
+
+user_input=$1
+
+if [[ "$user_input" == "" ]]; then
+	usage
+else
+	$user_input --help | less
+fi
+
+exit 0
